@@ -86,11 +86,17 @@ const patternBotIncludes = function (manifest) {
     `},
   };
 
+  let jsFileQueue = {
+    sync: [],
+    async: [],
+  };
   let downloadedAssets = {};
 
   const downloadHandler = function (e) {
+    const id = (e.target.hasAttribute('src')) ? e.target.getAttribute('src') : e.target.getAttribute('href');
+
     e.target.removeEventListener('load', downloadHandler);
-    downloadedAssets[e.target.getAttribute('href')] = true;
+    downloadedAssets[id] = true;
   };
 
   const findRootPath = function () {
@@ -115,7 +121,7 @@ const patternBotIncludes = function (manifest) {
     newLink.addEventListener('load', downloadHandler);
 
     document.head.appendChild(newLink);
-  }
+  };
 
   const bindAllCssFiles = function (rootPath) {
     if (manifest.commonInfo && manifest.commonInfo.readme && manifest.commonInfo.readme.attributes &&  manifest.commonInfo.readme.attributes.fontUrl) {
@@ -136,6 +142,54 @@ const patternBotIncludes = function (manifest) {
         addCssFile(`../${css.localPath}`);
       });
     });
+  };
+
+  const queueAllJsFiles = function (rootPath) {
+    if (manifest.patternLibFiles && manifest.patternLibFiles.js) {
+      manifest.patternLibFiles.js.forEach((js) => {
+        const href = `..${manifest.config.commonFolder}/${js.filename}`;
+
+        downloadedAssets[href] = false;
+        jsFileQueue.sync.push(href);
+      });
+    }
+
+    manifest.userPatterns.forEach((pattern) => {
+      if (!pattern.js) return;
+
+      pattern.js.forEach((js) => {
+        const href = `../${js.localPath}`;
+
+        downloadedAssets[href] = false;
+        jsFileQueue.async.push(href);
+      });
+    });
+  };
+
+  const addJsFile = function (href) {
+    const newScript = document.createElement('script');
+
+    newScript.setAttribute('src', href);
+    document.body.appendChild(newScript);
+
+    return newScript;
+  };
+
+  const bindNextJsFile = function (e) {
+    if (e && e.target) {
+      e.target.removeEventListener('load', bindNextJsFile);
+      downloadedAssets[e.target.getAttribute('src')] = true;
+    }
+
+    if (jsFileQueue.sync.length > 0) {
+      const scriptTag = addJsFile(jsFileQueue.sync.shift());
+      scriptTag.addEventListener('load', bindNextJsFile);
+    } else {
+      jsFileQueue.async.forEach((js) => {
+        const scriptTag = addJsFile(js);
+        scriptTag.addEventListener('load', downloadHandler);
+      });
+    }
   };
 
   const getPatternInfo = function (patternElem) {
@@ -312,7 +366,7 @@ const patternBotIncludes = function (manifest) {
           if (resp.status >= 200 && resp.status <= 299) {
             return resp.text();
           } else {
-            console.group('Cannot location pattern');
+            console.group('Cannot locate pattern');
             console.log(resp.url);
             console.log(`Error ${resp.status}: ${resp.statusText}`);
             console.groupEnd();
@@ -368,11 +422,13 @@ const patternBotIncludes = function (manifest) {
 
     rootPath = findRootPath();
     bindAllCssFiles(rootPath);
+    queueAllJsFiles(rootPath);
     allPatternTags = findAllPatternTags();
     allPatterns = constructAllPatterns(rootPath, allPatternTags);
 
     loadAllPatterns(allPatterns).then((allLoadedPatterns) => {
       renderAllPatterns(allPatternTags, allLoadedPatterns);
+      bindNextJsFile();
       hideLoadingScreen();
     }).catch((e) => {
       console.group('Pattern load error');
@@ -388,9 +444,9 @@ const patternBotIncludes = function (manifest) {
 /** 
  * Patternbot library manifest
  * /Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub
- * @version 1521465881687
+ * @version 02ee804c586ac20b16df139f10118566a97525b4
  */
-const patternManifest_1521465881686 = {
+const patternManifest_02ee804c586ac20b16df139f10118566a97525b4 = {
   "commonInfo": {
     "modulifier": [
       "responsive",
@@ -620,7 +676,8 @@ const patternManifest_1521465881686 = {
       "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/header",
       "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/links"
     ],
-    "pages": []
+    "pages": [],
+    "js": []
   },
   "userPatterns": [
     {
@@ -653,7 +710,8 @@ const patternManifest_1521465881686 = {
           "path": "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/banner/banner.css",
           "localPath": "patterns/banner/banner.css"
         }
-      ]
+      ],
+      "js": []
     },
     {
       "name": "buttons",
@@ -685,7 +743,8 @@ const patternManifest_1521465881686 = {
           "path": "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/buttons/buttons.css",
           "localPath": "patterns/buttons/buttons.css"
         }
-      ]
+      ],
+      "js": []
     },
     {
       "name": "cards",
@@ -720,7 +779,8 @@ const patternManifest_1521465881686 = {
           "path": "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/cards/cards.css",
           "localPath": "patterns/cards/cards.css"
         }
-      ]
+      ],
+      "js": []
     },
     {
       "name": "footer",
@@ -752,7 +812,8 @@ const patternManifest_1521465881686 = {
           "path": "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/footer/footer.css",
           "localPath": "patterns/footer/footer.css"
         }
-      ]
+      ],
+      "js": []
     },
     {
       "name": "header",
@@ -784,7 +845,8 @@ const patternManifest_1521465881686 = {
           "path": "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/header/header.css",
           "localPath": "patterns/header/header.css"
         }
-      ]
+      ],
+      "js": []
     },
     {
       "name": "links",
@@ -817,7 +879,8 @@ const patternManifest_1521465881686 = {
           "path": "/Users/thomasjbradley/Dropbox/learn-the-web/web-dev-4/geohub/patterns/links/links.css",
           "localPath": "patterns/links/links.css"
         }
-      ]
+      ],
+      "js": []
     }
   ],
   "config": {
@@ -840,5 +903,5 @@ const patternManifest_1521465881686 = {
   }
 };
 
-patternBotIncludes(patternManifest_1521465881686);
+patternBotIncludes(patternManifest_02ee804c586ac20b16df139f10118566a97525b4);
 }());
