@@ -3,6 +3,12 @@ patterns:
     width: 400
     description: |
       The cards are to be used on the homepage for introductions to the product categories.
+    fields:
+      - name: data
+        type: object
+        data:
+          source: "site.data.categories[0]"
+          type: ProductCategory
   product-card:
     width: 400
     description: |
