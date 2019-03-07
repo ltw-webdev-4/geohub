@@ -1,0 +1,30 @@
+description: "The buttons use our primary colour to draw attention and stand out. Each button has a specific purpose. Feel free to mix them with the `font-size` classes to make different sizes of buttons."
+
+patterns:
+  primary:
+    description: "The primary buttons are for cards, forms and where the background is a light colour."
+    fields:
+      - name: text
+        type: string
+        example: "See collection"
+      - name: url
+        type: url
+        example: "/crystals/"
+  light:
+    description: "The light buttons are for dark background areas."
+    fields:
+      - name: text
+        type: string
+        example: "See collection"
+      - name: url
+        type: url
+        example: "/crystals/"
+  ghost:
+    description: "The ghost buttons should be used exclusively on banners where the background is an image."
+    fields:
+      - name: text
+        type: string
+        example: "See collection"
+      - name: url
+        type: url
+        example: "/crystals/"

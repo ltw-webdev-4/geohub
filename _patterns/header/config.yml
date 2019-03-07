@@ -1,0 +1,8 @@
+description: |
+  The header pattern is to be used only as the masthead of the navigation.
+
+  The current page can be highlighted using the `highlight_nav` key in the page’s YAML metadata. The following options are supported:
+
+  - `highlight_nav: crystals`
+  - `highlight_nav: diamonds`
+  - `highlight_nav: gems`

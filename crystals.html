@@ -1,0 +1,10 @@
+---
+layout: default
+highlight_nav: crystals
+---
+
+{% pattern banner/banner heading="Crystals" text="See all the sparkly, wonderful crystals from the depths of the Earth." icon="crystal" %}
+
+{% for crystal in site.crystals %}
+  {% pattern cards/product-card data=crystal %}
+{% endfor %}

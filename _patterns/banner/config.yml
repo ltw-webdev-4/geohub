@@ -1,0 +1,22 @@
+description: "Banners should be used at the top of pages as an introduction to the content or a callout to something important."
+
+patterns:
+  banner:
+    fields:
+      - name: heading
+        type: string
+        example: "Brilliant, stunning, bright"
+      - name: text
+        type: string
+        example: "Geological marvels: gems, crystals, diamonds, geodes and much more!"
+      - name: icon
+        type: string
+        example: "ruby"
+      - name: button_text
+        type: string
+        example: "See collection"
+        required: false
+      - name: button_url
+        type: url
+        example: "/crystals/"
+        required: false

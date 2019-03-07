@@ -1,0 +1,41 @@
+permalink: pretty
+theme: jekyll_patternbot
+
+patternbot:
+  title: "GeoHub"
+  description: "GeoHub specializes in selling geological marvels: gems, crystals, diamonds, geodes and much more!"
+  font_url: "https://fonts.googleapis.com/css?family=Karma:400,600|Oswald:400,700"
+  rationales:
+    typefaces.primary: |
+      The primary typeface is a serif to try an create a slightly classic feel—while representing the delicacy of the gems. It should be used for the body copy and in most situations.
+    typefaces.secondary: |
+      The secondary typefaces is a bold, compressed sans-serif to demonstrate strength—like the rocks themselves. Use the secondary typeface as a highlight: headings, buttons, big captions, etc.
+    colors.primary: |
+      The primary colours are intensely bright to demonstrate the wonderful colours that exist in the realm of geological marvels. They should be used to highlight important information, for headings, links, etc.
+    colors.neutral: |
+      The neutral colours are there for all basic situations: body copy, text, lines, etc.
+  layouts:
+    default: |
+      The default layout should be used for almost every page, it includes the website’s primary header & footer.
+
+collections:
+  crystals:
+    output: true
+  diamonds:
+    output: true
+  gems:
+    output: true
+
+defaults:
+  - scope:
+      path: _crystals
+    values:
+      layout: product
+  - scope:
+      path: _diamonds
+    values:
+      layout: product
+  - scope:
+      path: _gems
+    values:
+      layout: product

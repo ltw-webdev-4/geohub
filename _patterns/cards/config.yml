@@ -1,0 +1,15 @@
+patterns:
+  card:
+    width: 400
+    description: |
+      The cards are to be used on the homepage for introductions to the product categories.
+  product-card:
+    width: 400
+    description: |
+      The product card is used on the product listing page to display each available product.
+    fields:
+      - name: data
+        type: object
+        data:
+          source: "site.crystals[0]"
+          type: Product
